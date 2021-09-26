@@ -43,7 +43,6 @@ def get_filters():
         "Enter a month between January and June. If you wish to view all " \
         "months' data, type ALL.\n>> ").lower()
         print()
-        break
 
         if month not in MONTHS + ['all']:
             print("Did you enter a valid month? Please check your input " \
@@ -213,6 +212,18 @@ def user_stats(df):
     print('-'*40)
 
 
+def display_data(df):
+    view_data = input('\nWould you like to view 5 rows of individual trip data? Enter yes or no\n').strip()
+    start_loc = 0
+    while (view_data.lower() == 'y' or view_data.lower() == 'yes') and start_loc < len(df.index):
+        if start_loc + 5 >= len(df.index):
+            print(df.iloc[start_loc:])
+        else:
+            print(df.iloc[start_loc : start_loc + 5])
+            start_loc += 5
+            view_data = input("Do you wish to see 5 more rows?: ").strip()
+
+
 def main():
     while True:
         city, month, day = get_filters()
@@ -223,7 +234,9 @@ def main():
         trip_duration_stats(df)
         user_stats(df)
 
-        restart = input('\nEnter y to restart or anything else to exit.\n')
+        display_data(df)
+
+        restart = input('\nEnter y to restart or anything else to exit.\n').strip()
         print()
         if restart.lower() != 'y' and restart.lower() != 'yes':
             break
